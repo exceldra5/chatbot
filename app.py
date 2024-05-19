@@ -71,9 +71,15 @@ chat_container = st.empty()
 
 chat_container.markdown(display_chat_messages(chat_messages), unsafe_allow_html=True)
 
-user_input = st.text_input("")
-
-if st.button("전송"):
+# Create columns for text input and button
+col1, col2 = st.columns([9, 1])
+with col1:
+    user_input = st.text_input("")
+with col2:
+    send_button = st.markdown(
+        '<button class="custom-button">전송</button>', unsafe_allow_html=True
+    )
+if send_button:
     if user_input:
         chat_messages.append({"role": "user", "content": user_input})
         st.session_state.chat_messages = chat_messages
@@ -82,8 +88,9 @@ if st.button("전송"):
             display_chat_messages(chat_messages), unsafe_allow_html=True
         )
 
-        # Retrieve response from the model
-        with st.spinner("답변을 생성중입니다..."):
+        # Show spinner
+        with st.spinner("상대방이 입력중입니다..."):
+            # Retrieve response from the model
             llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
             qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
             result = qa_chain(
@@ -93,6 +100,7 @@ if st.button("전송"):
                 }
             )
 
+        # Get the response from the model
         answer = result["result"]
 
         chat_messages.append({"role": "bot", "content": answer})
@@ -103,5 +111,3 @@ if st.button("전송"):
         )
 
         st.session_state.user_input = ""
-    else:
-        st.write("질문을 입력해주세요")
