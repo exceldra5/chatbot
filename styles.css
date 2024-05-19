@@ -1,0 +1,29 @@
+.chat-container {
+    background-color: #B1C6DB;
+    padding: 20px;
+    border-radius: 10px;
+    height: 50vh;
+    overflow-y: auto;
+}
+.user-message {
+    background-color: #FCE931;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    width: fit-content;
+    max-width: 70%;
+    float: right;
+    clear: both;
+}
+.bot-message {
+    background-color: #FFFFFF;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    width: fit-content;
+    max-width: 70%;
+    float: left;
+    clear: both;
+}
