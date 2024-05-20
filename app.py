@@ -68,18 +68,11 @@ with open("styles.css") as f:
     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 chat_container = st.empty()
-
 chat_container.markdown(display_chat_messages(chat_messages), unsafe_allow_html=True)
 
 # Create columns for text input and button
-col1, col2 = st.columns([9, 1])
-with col1:
-    user_input = st.text_input("")
-with col2:
-    send_button = st.markdown(
-        '<button class="custom-button">전송</button>', unsafe_allow_html=True
-    )
-if send_button:
+user_input = st.text_input("")
+if st.button("전송"):
     if user_input:
         chat_messages.append({"role": "user", "content": user_input})
         st.session_state.chat_messages = chat_messages
@@ -89,16 +82,18 @@ if send_button:
         )
 
         # Show spinner
-        with st.spinner("상대방이 입력중입니다..."):
-            # Retrieve response from the model
-            llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
-            qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
-            result = qa_chain(
-                {
-                    "query": "Imagine you are Sooyong Shin. The user will send you a message. Please respond as Sooyong Shin would, in a formal tone and conversational manner. If the user asks about your studies or achievements, provide detailed, personal insights. Make sure the length does not exceed 200 characters unless essential information needs to be included. Do not include a formal opening or closing. User:"
-                    + user_input
-                }
-            )
+        spinner_placeholder = st.empty()
+        with spinner_placeholder:
+            with st.spinner("답변을 작성중입니다..."):
+                # Retrieve response from the model
+                llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
+                qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
+                result = qa_chain(
+                    {
+                        "query": "Imagine you are Sooyong Shin. The user will send you a message. Please respond as Sooyong Shin would, in a formal tone and conversational manner. If the user asks about your studies or achievements, provide detailed, personal insights. Make sure the length does not exceed 200 characters unless essential information needs to be included. Do not include a formal opening or closing. User:"
+                        + user_input
+                    }
+                )
 
         # Get the response from the model
         answer = result["result"]
@@ -111,3 +106,6 @@ if send_button:
         )
 
         st.session_state.user_input = ""
+        spinner_placeholder.empty()  # Clear the spinner
+    else:
+        st.write("질문을 입력해주세요")
