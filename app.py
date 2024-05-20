@@ -1,3 +1,9 @@
+__import__("pysqlite3")
+import sys
+
+sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
+
+import os
 from dotenv import load_dotenv
 import streamlit as st
 from langchain_community.document_loaders import PyPDFDirectoryLoader
@@ -12,6 +18,7 @@ st.set_page_config(page_title="Chatbot", page_icon="🤖")
 
 @st.cache_resource
 def load_data():
+
     # Text loader
     loader = PyPDFDirectoryLoader("./pdf")
     data = loader.load_and_split()
@@ -31,11 +38,15 @@ def load_data():
     embeddings_model = OpenAIEmbeddings()
 
     # Vector Store
-    db = Chroma.from_texts(texts, embeddings_model)
+    db = Chroma.from_texts(
+        texts,
+        embeddings_model,
+    )
 
     return db
 
 
+# Load data and create vector store
 db = load_data()
 
 st.title("Ask to Sooyong")
@@ -86,7 +97,7 @@ if st.button("전송"):
         with spinner_placeholder:
             with st.spinner("답변을 작성중입니다..."):
                 # Retrieve response from the model
-                llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
+                llm = ChatOpenAI(model_name="gpt-4", temperature=0)
                 qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
                 result = qa_chain(
                     {

@@ -4,5 +4,6 @@ langchain_community
 langchain_openai
 pypdf
 chromadb
+pysqlite3-binary
 streamlit
 python-dotenv
