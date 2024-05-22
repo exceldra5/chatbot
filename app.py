@@ -97,7 +97,7 @@ if st.button("전송"):
         with spinner_placeholder:
             with st.spinner("답변을 작성중입니다..."):
                 # Retrieve response from the model
-                llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+                llm = ChatOpenAI(model_name="gpt-4o", temperature=0)
                 qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
                 result = qa_chain(
                     {
