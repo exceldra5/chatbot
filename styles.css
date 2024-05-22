@@ -28,7 +28,7 @@
     float: left;
     clear: both;
 }
-
+/* 
 .custom-button {
     background-color: #FCE931;
     border: none;
@@ -52,4 +52,4 @@
 .custom-button:disabled {
     background-color: #A9A9A9;
     cursor: not-allowed;
-}
+} */

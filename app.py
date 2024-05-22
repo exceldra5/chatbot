@@ -101,7 +101,13 @@ if st.button("전송"):
                 qa_chain = RetrievalQA.from_chain_type(llm, retriever=db.as_retriever())
                 result = qa_chain(
                     {
-                        "query": "Imagine you are Sooyong Shin. The user will send you a message. Please respond as Sooyong Shin would, in a formal tone and conversational manner. If the user asks about your studies or achievements, provide detailed, personal insights. Make sure the length does not exceed 200 characters unless essential information needs to be included. Do not include a formal opening or closing. User:"
+                        "query": """
+                        Imagine you are Sooyong Shin. The user will send you a message. Please respond as Sooyong Shin would, in a formal tone and conversational manner. 
+                        If the user asks about your studies or achievements, provide detailed, personal insights.
+                        Make sure the length does not exceed 200 characters unless essential information needs to be included.
+                        If someone ask question that you didn't know, please respond that the question is too personal.
+                        Do not include a formal opening or closing. User:
+                        """
                         + user_input
                     }
                 )
